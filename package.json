@@ -1,0 +1,76 @@
+{
+  "name": "topp-protocol-contracts",
+  "version": "1.0.0",
+  "description": "Smart Contract templates",
+  "homepage": "https://bitbucket.org/applicature/topp.protocol.contract/#readme",
+  "license": "UNLICENSED",
+  "keywords": [
+    "solidity",
+    "ethereum",
+    "smart",
+    "contracts"
+  ],
+  "repository": {
+    "type": "git",
+    "url": "git+https://bitbucket.org/applicature/topp.protocol.contract.git"
+  },
+  "author": "Andrew Zubko <andrew@applicature.com>",
+  "engines": {
+    "node": ">=8.0.0"
+  },
+  "scripts": {
+    "lint": "npm run solhint",
+    "ganache": "sh rpc.sh",
+    "console": "truffle console --network development",
+    "test": "truffle test",
+    "develop": "truffle develop",
+    "compile": "truffle compile",
+    "coverage": "./node_modules/.bin/solidity-coverage",
+    "migrate": "truffle migrate --network development",
+    "solium": "solium -d contracts/",
+    "precommit": "npm run test && npm run solium",
+    "test:ci": "./node_modules/.bin/run-with-ganache 'npm run coverage && npm run test' && npm run solium"
+  },
+  "directories": {
+    "test": "test"
+  },
+  "dependencies": {
+    "cucumber": "^5.0.1",
+    "openzeppelin-solidity": "^1.12.0",
+    "truffle": "^4.1.11",
+    "truffle-hdwallet-provider": "0.0.5"
+  },
+  "devDependencies": {
+    "babel-polyfill": "^6.23.0",
+    "babel-preset-es2015": "^6.18.0",
+    "babel-preset-stage-2": "^6.18.0",
+    "babel-preset-stage-3": "^6.17.0",
+    "babel-register": "^6.23.0",
+    "bignumber.js": "^4.1.0",
+    "chai": "^4.1.2",
+    "chai-as-promised": "^7.1.1",
+    "chai-bignumber": "^2.0.0",
+    "coveralls": "^2.13.1",
+    "dotenv": "^4.0.0",
+    "eslint": "^4.11.0",
+    "eslint-config-standard": "^10.2.1",
+    "eslint-plugin-import": "^2.8.0",
+    "eslint-plugin-node": "^5.2.1",
+    "eslint-plugin-promise": "^3.6.0",
+    "eslint-plugin-standard": "^3.0.1",
+    "eth-gas-reporter": "^0.1.1",
+    "ethereumjs-abi": "^0.6.5",
+    "ethereumjs-testrpc": "^4.1.3",
+    "ethereumjs-util": "^5.1.2",
+    "ethjs-abi": "^0.2.1",
+    "ganache-cli": "6.1.0",
+    "husky": "^0.14.3",
+    "minimetoken": "^0.2.0",
+    "mocha": "^5.0.0",
+    "mocha-junit-reporter": "^1.17.0",
+    "mocha-multi-reporters": "^1.1.7",
+    "solhint": "^1.1.10",
+    "solidity-coverage": "^0.5.11",
+    "solium": "^1.1.7"
+  }
+}

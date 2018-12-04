@@ -1,0 +1,9 @@
+node_modules
+build/
+coverage/
+migrations/
+test/
+zeppelin-solidity/
+coverageEnv/
+contracts/Migrations.sol
+contracts/tests
