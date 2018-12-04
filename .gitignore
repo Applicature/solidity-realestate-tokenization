@@ -1,5 +1,14 @@
+node_modules
+.idea
+coverage
+npm-debug.log
+*.iml
+*.ipr
+*.iws
+reports
+coverage.json
+build
+bridge.log
+coverageEnv
 .DS_Store
-node_modules/
-build/
-coverageEnv/
 package-lock.json
