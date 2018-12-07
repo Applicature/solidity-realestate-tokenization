@@ -3,6 +3,7 @@ pragma solidity ^0.4.24;
 import "./token/erc1358/ERC1358FTFull.sol";
 import "./RealEstateFabric.sol";
 import "./ico.contracts/token/erc20/MintableToken.sol";
+import "./RealEstateAgent.sol";
 import "./GeneralConstants.sol";
 
 
@@ -50,6 +51,44 @@ contract RealEstateFT is
         )
     {
 
+    }
+
+    function transfer(
+        address _to,
+        uint256 _value
+    )
+        public
+        returns (bool)
+    {
+        if (true == super.transfer(_to, _value)) {
+            RealEstateAgent(
+                management.contractRegistry(CONTRACT_AGENT)
+            ).onTransfer(msg.sender, _to);
+            return true;
+        }
+    }
+
+    function transferFrom(
+        address _from,
+        address _to,
+        uint256 _amount
+    )
+        public
+        returns (bool)
+    {
+        if (true == super.transferFrom(_from, _to, _amount)) {
+            RealEstateAgent(
+                management.contractRegistry(CONTRACT_AGENT)
+            ).onTransfer(_from, _to);
+            return true;
+        }
+    }
+
+    function mint(address _holder, uint256 _tokens) public {
+        super.mint(_holder, _tokens);
+        RealEstateAgent(
+            management.contractRegistry(CONTRACT_AGENT)
+        ).onMinting(_holder);
     }
 
 }

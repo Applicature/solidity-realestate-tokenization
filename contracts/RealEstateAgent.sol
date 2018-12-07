@@ -1,6 +1,7 @@
 pragma solidity ^0.4.24;
 
 import "./ico.contracts/agent/CrowdsaleAgent.sol";
+import "./RealEstateFT.sol";
 
 
 contract RealEstateAgent is CrowdsaleAgent {
@@ -11,17 +12,17 @@ contract RealEstateAgent is CrowdsaleAgent {
     {}
 
     function onContribution(
-        address _contributor,
-        uint256 _weiAmount,
-        uint256 _tokens,
-        uint256 _bonus
+        address,
+        uint256,
+        uint256,
+        uint256
     )
         public
         canCallOnlyRegisteredContract(CONTRACT_CROWDSALE)
     {}
 
     function onStateChange(
-        Crowdsale.State _state
+        Crowdsale.State
     )
         public
         requirePermission(CAN_UPDATE_STATE)
@@ -29,12 +30,56 @@ contract RealEstateAgent is CrowdsaleAgent {
     {}
 
     function onRefund(
-        address _contributor,
-        uint256 _tokens
+        address,
+        uint256
     )
         public
         canCallOnlyRegisteredContract(CONTRACT_CROWDSALE)
-        returns (uint256 burned)
+        returns (uint256)
     {}
+
+    function onTransfer(
+        address _from,
+        address _to
+    )
+        public
+        canCallOnlyRegisteredContract(CONTRACT_TOKEN)
+    {
+        RealEstateFT tokenInstance = RealEstateFT(
+            management.contractRegistry(CONTRACT_TOKEN)
+        );
+        Dividends dividendsInstance = Dividends(
+            management.contractRegistry(CONTRACT_DIVIDENDS)
+        );
+        if (_from != address(0)) {
+            dividendsInstance.updateValueAtNow(
+                _from,
+                    tokenInstance.balanceOf(_from)
+            );
+        }
+        if (_to != address(0)) {
+            dividendsInstance.updateValueAtNow(
+                _to, tokenInstance.balanceOf(_to)
+            );
+        }
+    }
+
+    function onMinting(
+        address _to
+    )
+        public
+        canCallOnlyRegisteredContract(CONTRACT_TOKEN)
+    {
+        RealEstateFT tokenInstance = RealEstateFT(
+            management.contractRegistry(CONTRACT_TOKEN)
+        );
+
+        Dividends dividendsInstance = Dividends(
+            management.contractRegistry(CONTRACT_DIVIDENDS)
+        );
+
+        dividendsInstance.updateValueAtNow(_to, tokenInstance.balanceOf(_to));
+        dividendsInstance.updateTotalSupplyAtNow(tokenInstance.totalSupply());
+    }
 }
 
