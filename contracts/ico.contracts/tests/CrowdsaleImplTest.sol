@@ -1,6 +1,6 @@
 pragma solidity ^0.4.24;
 
-import '../crowdsale/CrowdsaleImpl.sol';
+import "../crowdsale/CrowdsaleImpl.sol";
 
 
 contract CrowdsaleImplTest is CrowdsaleImpl {

@@ -26,7 +26,7 @@ contract ERC1358FTFull is ERC1358FT, ERC1358FTMetadata, ERC1358FTEnumerable {
         uint256 _initialTokenId,
         address _owner
     )
-        public 
+        public
         ERC1358FTMetadata(
             _name,
             _symbol,
@@ -37,12 +37,12 @@ contract ERC1358FTFull is ERC1358FT, ERC1358FTMetadata, ERC1358FTEnumerable {
             _nftAddress,
             _initialTokenId,
             _owner
-        ) 
+        )
     {
 
     }
 
-    /** 
+    /**
      * @dev Transfer specified token amounts from token holder to receipients
      * @notice Means that _receivers[index] address will get _values[index] tokens
      * @param _receivers - Array of FT's receivers addresses
@@ -50,8 +50,8 @@ contract ERC1358FTFull is ERC1358FT, ERC1358FTMetadata, ERC1358FTEnumerable {
      */
     function batchTransfer(
         address[] _receivers,
-        uint256[] _values 
-    ) 
+        uint256[] _values
+    )
         public
         returns (bool)
     {
@@ -84,7 +84,7 @@ contract ERC1358FTFull is ERC1358FT, ERC1358FTMetadata, ERC1358FTEnumerable {
         return true;
     }
 
-    /** 
+    /**
      * @dev Overrided transfer function
      * @notice Require function caller to be token holder
      * @param _to - Address of token receiver
@@ -93,9 +93,9 @@ contract ERC1358FTFull is ERC1358FT, ERC1358FTMetadata, ERC1358FTEnumerable {
     function transfer(
         address _to,
         uint256 _amount
-    ) 
-        public 
-        returns (bool) 
+    )
+        public
+        returns (bool)
     {
         require(tokenHolders[msg.sender] == true);
         require(super.transfer(_to, _amount) == true);
@@ -118,7 +118,7 @@ contract ERC1358FTFull is ERC1358FT, ERC1358FTMetadata, ERC1358FTEnumerable {
         uint256 _amount
     )
         public
-        returns (bool) 
+        returns (bool)
     {
         require(tokenHolders[_from] == true);
         require(super.transferFrom(_from, _to, _amount) == true);

@@ -41,7 +41,13 @@ contract RCrowdsaleTest is RefundableCrowdsale {
         tokensSold = _tokensSold;
     }
 
-    function internalContributionTest(address _contributor, uint256 _wei) public payable {
+    function internalContributionTest(
+        address _contributor,
+        uint256 _wei
+    )
+        public
+        payable
+    {
         internalContribution(_contributor, _wei);
     }
 }

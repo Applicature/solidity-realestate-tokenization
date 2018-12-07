@@ -1,180 +1,287 @@
-pragma solidity ^0.4.18;
+pragma solidity ^0.4.24;
 
-import "openzeppelin-solidity/contracts/ownership/Ownable.sol";
-import "openzeppelin-solidity/contracts/math/SafeMath.sol";
-import "./../token/erc20/minime/MiniMeERC20.sol";
+import "openzeppelin-solidity/contracts/token/ERC20/StandardToken.sol";
+import "../token/erc20/MintableToken.sol";
+import "../Management.sol";
+import "../Managed.sol";
 
 
-// TODO make implementation on base not MINIME
-// Dividends 
-// ask Roma and Sasha more
+contract Dividends is Ownable, Managed {
 
-/// @title Dividends
-/// @author Applicature
-///// @notice Contract is used only for collecting funding and paying dividends/share profit
-contract Dividends is Ownable {
+    using SafeMath for uint256;
 
-    constructor() 
-        public 
-    {
-        
+    struct Checkpoint {
+        // `fromBlock` is the block number that the value was generated from
+        uint256 fromBlock;
+        // `value` is the amount of tokens at a specific block number
+        uint256 value;
     }
-//
-//    using SafeMath for uint256;
-//
-//    MiniMeERC20 public miniMeToken;
-//
-//    struct Dividend {
-//        uint256 blockNumber;
-//        uint256 timestamp;
-//        uint256 amount;
-//        uint256 claimedAmount;
-//        uint256 totalSupply;
-//        bool recycled;
-//        mapping(address => bool) claimed;
-//    }
-//
-//    Dividend[] public dividends;
-//
-//    mapping(address => uint256) public dividendsClaimed;
-//
-//    // start point for dividends pay out
-//    // after round zero update it every quarter
-//    uint256 internal dateTimeWhenRoundZeroOrQuarterFinished;
-//
-//    /// configurable through setter
-//    uint256 public recycleTime = 90 days;
-//
-//    event DividendDeposited(address indexed _investor, uint256 _blockNumber, uint256 _amount, uint256 _totalSupply, uint256 _dividendIndex);
-//    event DividendClaimed(address indexed _claimer, uint256 _dividendIndex, uint256 _claim);
-//    event DividendRecycled(address indexed _recycler, uint256 _blockNumber, uint256 _amount, uint256 _totalSupply, uint256 _dividendIndex);
-//
-//    modifier validDividendIndex(uint256 _dividendIndex) {
-//        require(_dividendIndex < dividends.length);
-//        _;
-//    }
-//
-//    function() public payable {
-//
-//    }
-//
-//    /// @notice set recycle time
-//    function setRecycleTime(uint256 _period) public onlyOwner {
-//        require(_period != 0);
-//        recycleTime = _period;
-//    }
-//
-//    /// @notice set token
-//    function setToken(address _token) public onlyOwner {
-//        require(_token != address(0));
-//        miniMeToken = MiniMeERC20(_token);
-//    }
-//
-//    /// @notice set new value for `dateTimeWhenRoundZeroOrQuarterFinished`
-//    function setBindingDate(uint256 _data) public onlyOwner {
-//        dateTimeWhenRoundZeroOrQuarterFinished = _data;
-//    }
-//
-//    /// @notice 1st case(preferable): Admin/Owner send ethers to this contract in order to share with investors
-//    /// this function called by platform at the end of quarter
-//    /// it deposits the certain amount to pay dividends so we always knew what amount need to be shared in the period
-//    /// it sets new data for dividends
-//    /// it starts the new time period
-//    function payableDepositDividend() public payable onlyOwner {
-//        uint256 currentSupply = miniMeToken.totalSupplyAt(block.number);
-//        uint256 dividendIndex = dividends.length;
-//        uint256 blockNumber = SafeMath.sub(block.number, 1);
-//        dividends.push(
-//            Dividend(
-//                blockNumber,
-//                getNow(),
-//                msg.value,
-//                0,
-//                currentSupply,
-//                false
-//            )
-//        );
-//        DividendDeposited(msg.sender, blockNumber, msg.value, currentSupply, dividendIndex);
-//    }
-//
-//    /// @notice 2nd case(less preferable but possible): Contract collects money during the period
-//    ///  Admin/Owner calls this function in order to set up dividends data,
-//    /// it uses the current balance as amount for dividends, since next moment it collects money for next
-//    /// pay period
-//    /// it starts the new time period
-//    /// earlier then 90 days platform cannot call it
-//    function depositDividend() public onlyOwner {
-//        require((now - dateTimeWhenRoundZeroOrQuarterFinished) > recycleTime);
-//
-//        uint256 currentSupply = miniMeToken.totalSupplyAt(block.number);
-//        uint256 dividendIndex = dividends.length;
-//        uint256 blockNumber = SafeMath.sub(block.number, 1);
-//        uint256 currentBalance = this.balance;
-//        dividends.push(
-//            Dividend(
-//                blockNumber,
-//                getNow(),
-//                currentBalance,
-//                0,
-//                currentSupply,
-//                false
-//            )
-//        );
-//        dateTimeWhenRoundZeroOrQuarterFinished = now;
-//        DividendDeposited(msg.sender, blockNumber, currentBalance, currentSupply, dividendIndex);
-//    }
-//
-//    /// @notice the claimer always needs to call into the contract to claim their dividend
-//    /// claim dividends for more than one pay period
-//    function claimDividendAll() public {
-//        require(dividendsClaimed[msg.sender] < dividends.length);
-//        for (uint i = dividendsClaimed[msg.sender]; i < dividends.length; i++) {
-//            if ((dividends[i].claimed[msg.sender] == false) && (dividends[i].recycled == false)) {
-//                dividendsClaimed[msg.sender] = SafeMath.add(i, 1);
-//                claimDividend(i);
-//            }
-//        }
-//    }
-//
-//    /// @notice the claimer always needs to call into the contract to claim their dividend
-//    /// claim dividends for one pay period
-//    function claimDividend(uint256 _dividendIndex) public validDividendIndex(_dividendIndex) {
-//        Dividend dividend = dividends[_dividendIndex];
-//        require(dividend.claimed[msg.sender] == false);
-//        require(dividend.recycled == false);
-//        uint256 balance = miniMeToken.balanceOfAt(msg.sender, dividend.blockNumber);
-//        uint256 claim = balance.mul(dividend.amount).div(dividend.totalSupply);
-//        dividend.claimed[msg.sender] = true;
-//        dividend.claimedAmount = dividend.claimedAmount.add(claim);
-//        if (claim > 0) {
-//            msg.sender.transfer(claim);
-//            DividendClaimed(msg.sender, _dividendIndex, claim);
-//        }
-//    }
-//
-//    function recycleDividend(uint256 _dividendIndex) public onlyOwner validDividendIndex(_dividendIndex) {
-//        Dividend dividend = dividends[_dividendIndex];
-//        require(dividend.recycled == false);
-//        require(dividend.timestamp < SafeMath.sub(now, recycleTime));
-//        dividends[_dividendIndex].recycled = true;
-//        uint256 currentSupply = miniMeToken.totalSupplyAt(block.number);
-//        uint256 remainingAmount = SafeMath.sub(dividend.amount, dividend.claimedAmount);
-//        uint256 dividendIndex = dividends.length;
-//        dividends.push(
-//            Dividend(
-//                block.number,
-//                now,
-//                remainingAmount,
-//                0,
-//                currentSupply,
-//                false
-//            )
-//        );
-//        DividendRecycled(msg.sender, block.number, remainingAmount, currentSupply, dividendIndex);
-//    }
-//
-//    function getNow() internal constant returns (uint256) {
-//        return now;
-//    }
-//
+
+    mapping(address => Checkpoint[]) public balances;
+
+    // Tracks the history of the `totalSupply` of the token
+    Checkpoint[] public totalSupplyHistory;
+
+    struct Dividend {
+        uint256 id;
+
+        uint256 block;
+        uint256 time;
+        uint256 amount;
+
+        uint256 claimedAmount;
+        uint256 transferredBack;
+
+        uint256 totalSupply;
+
+    }
+
+    mapping(address => uint256[]) public claimed;
+
+    /* variables */
+    Dividend[] dividends;
+
+    /* Events */
+    event DividendTransferred(
+        uint256 id,
+        address indexed _address,
+        uint256 _block,
+        uint256 _amount,
+        uint256 _totalSupply
+    );
+
+    event Disbursed(address indexed holder, uint256 value);
+    event UnclaimedDividendTransfer(uint256 id, uint256 _value);
+
+    constructor (address _management)
+        public
+        Managed(_management)
+    {}
+
+    function updateValueAtNow(address _holder, uint256 _value)
+        public
+        requirePermission(CAN_UPDATE_DIVIDENDS)
+    {
+        Checkpoint[] storage checkpoints = balances[_holder];
+        internalUpdateValueAtNow(checkpoints, _value);
+    }
+
+    function updateTotalSupplyAtNow(uint256 _totalSupply)
+        public
+        requirePermission(CAN_UPDATE_DIVIDENDS)
+    {
+        internalUpdateValueAtNow(totalSupplyHistory, _totalSupply);
+    }
+
+    // before running this function approve _dividendAmount
+    //for spending by address of Dividend contract
+
+    function addDividend()
+        public
+        payable
+        requirePermission(CAN_CREATE_DIVIDENDS)
+    {
+        require(msg.value > 0, ERROR_WRONG_AMOUNT);
+        uint256 id = dividends.length;
+        Management(management).contractRegistry(CONTRACT_TOKEN);
+        uint256 currentTotalSupply = StandardToken(
+            Management(management).contractRegistry(CONTRACT_TOKEN)
+        ).totalSupply();
+
+        dividends.push(
+            Dividend(
+                id,
+                block.number,
+                now,
+                msg.value,
+                0,
+                0,
+                currentTotalSupply
+            )
+        );
+
+        emit DividendTransferred(
+            id,
+            msg.sender,
+            block.number,
+            msg.value,
+            currentTotalSupply
+        );
+    }
+
+    function balanceOf(address _owner)
+        public
+        view
+        returns (uint256 balance)
+    {
+        return balanceOfAt(_owner, block.number);
+    }
+
+    // get all the unclaimed dividends
+    /// @return The number of tokens being claimed
+    function claim() public returns (uint256) {
+        if (dividends.length == claimed[msg.sender].length) {
+            return 0;
+        }
+        uint256 totalAmount;
+        Checkpoint[] storage checkpoints = balances[msg.sender];
+        for (
+            uint256 i = claimed[msg.sender].length;
+            i < dividends.length;
+            i++
+        ) {
+            Dividend storage dividend = dividends[i];
+            uint256 amount = calculateAmount(
+                checkpoints, dividend.block, dividend.amount
+            );
+            dividend.claimedAmount = (dividend.claimedAmount).add(amount);
+            require(
+                dividend.claimedAmount <= dividend.amount,
+                ERROR_WRONG_AMOUNT
+            );
+            claimed[msg.sender].push(i);
+            totalAmount = totalAmount.add(amount);
+        }
+        msg.sender.transfer(totalAmount);
+        emit Disbursed(msg.sender, totalAmount);
+        return totalAmount;
+    }
+
+    // calcualte  claim amount for token holders
+    function calculateClaimAmount(address _holder)
+        public
+        view
+        returns (uint256)
+    {
+        if (dividends.length == claimed[msg.sender].length) {
+            return 0;
+        }
+        uint256 totalAmount;
+        Checkpoint[] storage checkpoints = balances[_holder];
+        for (uint256 i = claimed[_holder].length; i < dividends.length; i++) {
+            Dividend memory dividend = dividends[i];
+            uint256 amount = calculateAmount(
+                checkpoints,
+                dividend.block,
+                dividend.amount
+            );
+            totalAmount = totalAmount.add(amount);
+        }
+        return totalAmount;
+    }
+
+    /// @dev Queries the balance of `_owner` at a specific `_blockNumber`
+    /// @param _owner The address from which the balance will be retrieved
+    /// @param _blockNumber The block number when the balance is queried
+    /// @return The balance at `_blockNumber`
+    function balanceOfAt(address _owner, uint256 _blockNumber)
+        public
+        view
+        returns (uint256)
+    {
+        // These next few lines are used when the balance of the token is
+        //  requested before a check point was ever created
+        if ((balances[_owner].length == 0)
+            || (balances[_owner][0].fromBlock > _blockNumber)) {
+            return 0;
+            // This will return the expected balance during normal situations
+        } else {
+            return getValueAt(balances[_owner], _blockNumber);
+        }
+    }
+
+    /// @notice Total amount of tokens at a specific `_blockNumber`.
+    /// @param _blockNumber The block number when the totalSupply is queried
+    /// @return The total amount of tokens at `_blockNumber`
+    function totalSupplyAt(uint256 _blockNumber) public view returns (uint256) {
+
+        // These next few lines are used when the totalSupply of the token is
+        //  requested before a check point was ever created for this token, it
+        //  requires that the `parentToken.totalSupplyAt` be queried at the
+        //  genesis block for this token as that contains totalSupply of this
+        //  token at this block number.
+        if ((totalSupplyHistory.length == 0)
+            || (totalSupplyHistory[0].fromBlock > _blockNumber)) {
+            return 0;
+        } else {
+            return getValueAt(totalSupplyHistory, _blockNumber);
+        }
+    }
+
+    /// @dev `getValueAt` retrieves the number of tokens at a given block number
+    /// @param _checkpoints The history of values being queried
+    /// @param _block The block number to retrieve the value at
+    /// @return The number of tokens being queried
+    function getValueAt(
+        Checkpoint[] storage
+        _checkpoints,
+        uint256 _block
+    )
+        internal
+        view
+        returns (uint256)
+    {
+        if (_checkpoints.length == 0) return 0;
+
+        // Shortcut for the actual value
+        if (_block >= _checkpoints[_checkpoints.length - 1].fromBlock)
+            return _checkpoints[_checkpoints.length - 1].value;
+        if (_block < _checkpoints[0].fromBlock) return 0;
+
+        // Binary search of the value in the array
+        uint256 min = 0;
+        uint256 max = _checkpoints.length - 1;
+        while (max > min) {
+            uint256 mid = (max + min + 1) / 2;
+            if (_checkpoints[mid].fromBlock <= _block) {
+                min = mid;
+            } else {
+                max = mid - 1;
+            }
+        }
+        return _checkpoints[min].value;
+    }
+
+    /// @dev `internalUpdateValueAtNow` used to update the `balances` map and the
+    ///  `totalSupplyHistory`
+    /// @param _checkpoints The history of data being updated
+    /// @param _value The new number of tokens
+    function internalUpdateValueAtNow(
+        Checkpoint[] storage _checkpoints,
+        uint256 _value
+    )
+        internal
+        returns (bool)
+    {
+        if (
+            (_checkpoints.length == 0)
+            || (_checkpoints[_checkpoints.length - 1].fromBlock < block.number)
+        ) {
+            Checkpoint storage newCheckPoint = _checkpoints[_checkpoints.length++];
+            newCheckPoint.fromBlock = uint256(block.number);
+            newCheckPoint.value = uint256(_value);
+        } else {
+            Checkpoint storage oldCheckPoint = _checkpoints[_checkpoints.length - 1];
+            oldCheckPoint.value = uint256(_value);
+        }
+    }
+
+    function calculateAmount(
+        Checkpoint[] storage _checkpoints,
+        uint256 _blockNumber,
+        uint256 _amount
+    )
+        internal
+        view
+        returns (uint256 totalAmount)
+    {
+        if (_checkpoints.length == 0) {
+            return 0;
+        }
+        return _amount
+            .mul(getValueAt(_checkpoints, _blockNumber))
+            .div(totalSupplyAt(_blockNumber));
+    }
+
 }
+

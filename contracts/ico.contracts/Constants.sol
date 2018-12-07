@@ -15,6 +15,8 @@ contract Constants {
     uint256 public constant WHITELISTED = 9;
     uint256 public constant SIGNERS = 10;
     uint256 public constant EXTERNAL_CONTRIBUTORS = 11;
+    uint256 public constant CAN_UPDATE_DIVIDENDS = 12;
+    uint256 public constant CAN_CREATE_DIVIDENDS = 13;
 
 
     // Contract Registry keys
@@ -26,9 +28,7 @@ contract Constants {
     uint256 public constant CONTRACT_FORWARDER = 6;
     uint256 public constant CONTRACT_REFERRAL = 7;
     uint256 public constant CONTRACT_STATS = 8;
-    //@todo  add if it is needed
-    // @referral
-    // @stats
+    uint256 public constant CONTRACT_DIVIDENDS = 9;
 
     string public constant ERROR_ACCESS_DENIED = "ERROR_ACCESS_DENIED";
     string public constant ERROR_WRONG_AMOUNT = "ERROR_WRONG_AMOUNT";

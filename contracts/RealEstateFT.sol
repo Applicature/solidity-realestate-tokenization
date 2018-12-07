@@ -2,11 +2,15 @@ pragma solidity ^0.4.24;
 
 import "./token/erc1358/ERC1358FTFull.sol";
 import "./RealEstateFabric.sol";
-import "./ico.contracts/token/erc20/MintableBurnableToken.sol";
+import "./ico.contracts/token/erc20/MintableToken.sol";
 import "./GeneralConstants.sol";
 
 
-contract RealEstateFT is ERC1358FTFull, MintableBurnableToken, GeneralConstants {
+contract RealEstateFT is
+    ERC1358FTFull,
+    MintableToken,
+    GeneralConstants
+{
 
     /**
      * @dev Constructor of RealEstateFT smart contract for Tallyx system
@@ -15,7 +19,6 @@ contract RealEstateFT is ERC1358FTFull, MintableBurnableToken, GeneralConstants 
      * @param _decimals - Precision amount for FT
      * @param _maxSupply - Max FT supply
      * @param _nftAddress - Address of RealEstateFabric
-     * @param _initialTokenId - RealEstate id related to this FT
      * @param _management - Address of Management
      * @param _owner - Address of FT owner
      */
@@ -39,7 +42,7 @@ contract RealEstateFT is ERC1358FTFull, MintableBurnableToken, GeneralConstants 
             _tokenId,
             _owner
         )
-        MintableBurnableToken(
+        MintableToken(
             _maxSupply,
             0,
             false,

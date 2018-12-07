@@ -2,11 +2,12 @@ pragma solidity ^0.4.24;
 
 import "./IERC1358FTEnumerable.sol";
 import "./ERC1358FT.sol";
+import "openzeppelin-solidity/contracts/token/ERC20/StandardToken.sol";
 
 
-contract ERC1358FTEnumerable is ERC1358FT {
+contract ERC1358FTEnumerable is ERC1358FT, StandardToken {
 
-    // Total tokens supply 
+    // Total tokens supply
     uint256 internal totalSupply_;
 
     // Address of main NFT
@@ -42,7 +43,7 @@ contract ERC1358FTEnumerable is ERC1358FT {
         totalSupply_ = _totalSupply;
         nftAddress_ = _nftAddress;
         initialTokenId_ = _initialTokenId;
-        _balances[_owner] = _totalSupply;
+        balances[_owner] = _totalSupply;
         tokenHolders[_owner] = true;
         tokenHoldersRegistry.push(_owner);
     }
@@ -54,7 +55,7 @@ contract ERC1358FTEnumerable is ERC1358FT {
         return tokenHoldersRegistry.length;
     }
 
-    /** 
+    /**
      * @dev Returns address of token holder by index inside array
      * of token holders
      * @param _index - Index inside array of token holders
@@ -78,10 +79,10 @@ contract ERC1358FTEnumerable is ERC1358FT {
     function holders(
         uint256 _from,
         uint256 _to
-    ) 
-        public 
-        view 
-        returns (address[], uint256[]) 
+    )
+        public
+        view
+        returns (address[], uint256[])
     {
         require(
             _from >= 0 &&
@@ -90,7 +91,7 @@ contract ERC1358FTEnumerable is ERC1358FT {
 
         address[] memory holdersAddresses = new address[](_to.sub(_from));
         uint256[] memory holdersBalance = new uint256[](_to.sub(_from));
-    
+
         for (uint256 i = _from; i < _to; i++) {
             holdersAddresses[i] = tokenHoldersRegistry[i];
             holdersBalance[i] = balanceOf(tokenHoldersRegistry[i]);

@@ -10,35 +10,13 @@ import "./Permissions.sol";
 import "./RealEstateCrowdsale.sol";
 import "./ico.contracts/Management.sol";
 
+
 contract RealEstateFabric is ERC1358, Strings, GeneralConstants, Permissions {
     using SafeMath for uint256;
 
+    address public signerAddress;
     // Mapping from Non-Fungible token id to address of crowdsale of Fungible Token
     mapping (uint256 => address) public ftCrowdsalesAddresses;
-
-    // Struct that implements REAL_ESTATE (obligatoire) entity for Tallyx system
-    struct RealEstate {
-//        string realEstateId;
-//        address owner;
-//        address beneficiary;
-//        uint256 value;
-//        uint256 payDate;
-//        RealEstateMetadata metadata;
-    }
-//
-//    // Struct that implements REAL_ESTATE (obligatoire) metadata entity for Tallyx system
-//    struct RealEstateMetadata {
-//        string assetReference;
-//        string ccy;
-//        uint256 status;
-//        uint256 payStatus;
-//        uint256 marketId;
-//        bool active;
-//        bool marketplaceIsLocked;
-//    }
-
-    // Mapping from NFT id to RealEstate data
-    mapping (uint256 => RealEstate) private realEstates;
 
     /**
      * Constructor of RealEstateFabric smart contract for Tallyx system
@@ -57,6 +35,48 @@ contract RealEstateFabric is ERC1358, Strings, GeneralConstants, Permissions {
             PERMISSION_TO_MODIFY_STATUS |
             PERMISSION_TO_MODIFY_PAY_STATUS |
             PERMISSION_TO_DEACTIVATE;
+    }
+
+    function createRealEstate(
+        string _realEstateUri,
+        address _owner,
+        uint256 _sqmSupply
+    )
+        external
+        hasPermission(msg.sender, PERMISSION_TO_CREATE)
+        returns (uint256)
+    {
+        require(
+            _owner != address(0),
+            ERROR_VALUE_EQUALS_ZERO
+        );
+
+        uint256 tokenId = _allTokens.length;
+        address fungibleToken;
+        address fungibleTokenCrowdsale;
+
+        fungibleToken = _createFT(
+            concat("REAL_ESTATE", toString(tokenId)),
+            "REAL_ESTATE",
+            2,
+            _owner,
+            _sqmSupply,
+            tokenId
+        );
+
+        require(
+            super._mint(_owner, tokenId) == true,
+            ERROR_MINTING_NFT
+        );
+        _setTokenURI(
+            tokenId,
+            _realEstateUri
+        );
+        ftAddresses[tokenId] = fungibleToken;
+        ftCrowdsalesAddresses[tokenId] =  fungibleTokenCrowdsale;
+        nftValues[tokenId] = _sqmSupply;
+
+        return tokenId;
     }
 
     /**
@@ -119,48 +139,11 @@ contract RealEstateFabric is ERC1358, Strings, GeneralConstants, Permissions {
         require(false, ERROR_DISALLOWED);
     }
 
-    function createRealEstate(
-        string _realEstateUri,
-        address _owner,
-        uint256 _sqmSupply,
-        uint256 _priceInCurrencyPerSqm,
-        uint256[2] _investmentPeriod
-    )
-        external
+    function setSignerAddress(address _signerAddress)
+        public
         hasPermission(msg.sender, PERMISSION_TO_CREATE)
-        returns (uint256)
     {
-        require(
-            _owner != address(0)
-        );
-
-        uint256 tokenId = _allTokens.length;
-        address fungibleToken;
-        address fungibleTokenCrowdsale;
-
-        fungibleToken = _createFT(
-            concat("REAL_ESTATE", toString(tokenId)),
-            "REAL_ESTATE",
-            2,
-            _owner,
-            _sqmSupply,
-            tokenId
-        );
-
-        fungibleTokenCrowdsale = _createCrowdsale(
-            fungibleToken,
-            _priceInCurrencyPerSqm,
-            _investmentPeriod
-        );
-        require(
-            super._mint(_owner, tokenId) == true,
-            ERROR_MINTING_NFT
-        );
-        ftAddresses[tokenId] = fungibleToken;
-        ftCrowdsalesAddresses[tokenId] =  fungibleTokenCrowdsale;
-        nftValues[tokenId] = _sqmSupply;
-
-        return tokenId;
+        signerAddress = _signerAddress;
     }
 
     /**
@@ -180,7 +163,8 @@ contract RealEstateFabric is ERC1358, Strings, GeneralConstants, Permissions {
         require(
             _decimals > 0 &&
             _tokenOwner != address(0) &&
-        _fungibleTokenSupply > 0
+            _fungibleTokenSupply > 0,
+            ERROR_VALUE_EQUALS_ZERO
         );
         address managementAddress = new Management();
         RealEstateFT fungibleToken = new RealEstateFT(
@@ -197,17 +181,33 @@ contract RealEstateFabric is ERC1358, Strings, GeneralConstants, Permissions {
     }
 
     function _createCrowdsale(
-        address fungibleToken,
-        uint256 _priceInCurrencyPerSqm,
-        uint256 _investmentPeriod
+        uint256 _tokenId,
+        address _fungibleToken,
+        address _signerAddress,
+        address _etherHolder,
+        uint256[2] _investmentPeriod,
+        bool _tiersChangingAllowed,
+        bool _updateChangeRateAllowed,
+        uint256[] _tiers,
+        uint256 _etherPriceInCurrency,
+        uint256 _currencyDecimals,
+        uint256 _percentageAbsMax
     )
         internal
         returns (address)
     {
         RealEstateCrowdsale fungibleTokenCrowdsale = new RealEstateCrowdsale(
-            fungibleToken,
-            _priceInCurrencyPerSqm,
-            _investmentPeriod
+            _tokenId,
+            _fungibleToken,
+            _signerAddress,
+            _etherHolder,
+            _investmentPeriod,
+            _tiersChangingAllowed,
+            _updateChangeRateAllowed,
+            _tiers,
+            _etherPriceInCurrency,
+            _currencyDecimals,
+            _percentageAbsMax
         );
         return address(fungibleTokenCrowdsale);
     }
