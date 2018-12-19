@@ -29,11 +29,11 @@ contract IERC1358 is IERC1358NFTFull {
         address _tokenOwner,
         uint256 _fungibleTokenSupply,
         uint256 _tokenId
-    ) 
+    )
         internal
         returns (address);
 
-    /** 
+    /**
      * @dev Mint NFT token and create FT accordingly
      * @param _name - Name for FT
      * @param _symbol - Symbol for FT
@@ -41,17 +41,17 @@ contract IERC1358 is IERC1358NFTFull {
      * @param _tokenOwner - Address of FT owner
      * @param _fungibleTokenSupply - Max token supply for FT
      */
-    function mint(
+    function mintNFT(
         string _name,
         string _symbol,
         uint256 _decimals,
         address _tokenOwner,
         uint256 _fungibleTokenSupply
-    ) 
+    )
         public
         returns (uint256);
 
-    /** 
+    /**
      * @dev Burn NFT and delete FT data
      * @param _owner - owner address of NFT to burn
      * @param _tokenId - Unique identifier of NFT
@@ -59,7 +59,7 @@ contract IERC1358 is IERC1358NFTFull {
     function burn(
         address _owner,
         uint256 _tokenId
-    ) 
+    )
         public
         returns (bool);
 
@@ -69,22 +69,22 @@ contract IERC1358 is IERC1358NFTFull {
      */
     function nftValue(
         uint256 _tokenId
-    ) 
+    )
         public
-        view 
+        view
         returns (uint256);
 
-    /** 
+    /**
      * @dev Returns FT token balance of specified NFT
-     * @param _holder - Holder address 
+     * @param _holder - Holder address
      * @param _tokenId - Unique identifier of NFT
      */
     function ftHolderBalance(
         uint256 _tokenId,
         address _holder
-    ) 
-        public 
-        view 
+    )
+        public
+        view
         returns (uint256);
 
     /**
@@ -97,7 +97,7 @@ contract IERC1358 is IERC1358NFTFull {
         uint256 _tokenId,
         uint256 _indexFrom,
         uint256 _indexTo
-    ) 
+    )
         public
         view
         returns (address[], uint256[]);

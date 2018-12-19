@@ -147,18 +147,18 @@ contract PricingStrategyImpl is PricingStrategy, ExchangeContract {
         super.setEtherInCurrency(_price);
     }
 
-    function isInitialized() 
-        public 
-        view 
-        returns (bool) 
+    function isInitialized()
+        public
+        view
+        returns (bool)
     {
         return tiers.length > 0;
     }
 
-    function getArrayOfTiers() 
-        public 
-        view 
-        returns (uint256[]) 
+    function getArrayOfTiers()
+        public
+        view
+        returns (uint256[])
     {
         uint256[] memory tiersData = new uint256[](
             getTiersAmount().mul(TIER_ELEMENTS_AMOUNT)
@@ -181,17 +181,17 @@ contract PricingStrategyImpl is PricingStrategy, ExchangeContract {
     }
 
     function getTiersAmount()
-        public 
-        view 
-        returns (uint256) 
+        public
+        view
+        returns (uint256)
     {
         return tiers.length;
     }
 
-    function getTierIndex(uint256 _tokensSold) 
-        public 
-        view 
-        returns (uint256) 
+    function getTierIndex(uint256 _tokensSold)
+        public
+        view
+        returns (uint256)
     {
         for (uint256 i = 0; i < tiers.length; i++) {
             if (
@@ -260,10 +260,10 @@ contract PricingStrategyImpl is PricingStrategy, ExchangeContract {
         }
     }
 
-    function getDiscount(uint256 _tierIndex) 
-        public 
-        view 
-        returns (uint256) 
+    function getDiscount(uint256 _tierIndex)
+        public
+        view
+        returns (uint256)
     {
         if (_tierIndex < uint256(tiers.length)) {
             return tiers[_tierIndex].discountPercents;
@@ -276,7 +276,7 @@ contract PricingStrategyImpl is PricingStrategy, ExchangeContract {
         returns (uint256)
     {
         if (
-            _tierIndex < uint256(tiers.length) && 
+            _tierIndex < uint256(tiers.length) &&
             tiers[_tierIndex].minInvestInCurrency > 0
         ) {
             return tiers[_tierIndex].minInvestInCurrency
@@ -291,7 +291,7 @@ contract PricingStrategyImpl is PricingStrategy, ExchangeContract {
         returns (uint256)
     {
         if (
-            _tierIndex < uint256(tiers.length) && 
+            _tierIndex < uint256(tiers.length) &&
             tiers[_tierIndex].maxInvestInCurrency > 0
         ) {
             return tiers[_tierIndex].maxInvestInCurrency
@@ -310,19 +310,19 @@ contract PricingStrategyImpl is PricingStrategy, ExchangeContract {
             .sub(_tokensSold);
     }
 
-    function getTierUnsoldTokens(uint256 _tokensSold) 
-        public 
-        view 
-        returns (uint256) 
-    {   
+    function getTierUnsoldTokens(uint256 _tokensSold)
+        public
+        view
+        returns (uint256)
+    {
         return tiers[getActualTierIndex(_tokensSold)]
             .maxTokensCollected
             .sub(_tokensSold);
     }
 
     function calculateBonusAmount(
-        uint256 _tierIndex, 
-        uint256 _tokens, 
+        uint256 _tierIndex,
+        uint256 _tokens,
         uint256 _bonusProduced
     )
         public
@@ -343,14 +343,14 @@ contract PricingStrategyImpl is PricingStrategy, ExchangeContract {
     }
 
     function getTokensWithoutRestrictions(
-        uint256 _weiAmount, 
+        uint256 _weiAmount,
         uint256 _tokensSold
     )
         public
         view
         returns (
-            uint256 tokens, 
-            uint256 tokensExcludingBonus, 
+            uint256 tokens,
+            uint256 tokensExcludingBonus,
             uint256 bonus
         )
     {
@@ -379,8 +379,8 @@ contract PricingStrategyImpl is PricingStrategy, ExchangeContract {
         public
         view
         returns (
-            uint256 tokens, 
-            uint256 tokensExcludingBonus, 
+            uint256 tokens,
+            uint256 tokensExcludingBonus,
             uint256 bonus
         )
     {
@@ -450,7 +450,7 @@ contract PricingStrategyImpl is PricingStrategy, ExchangeContract {
         public
         view
         returns (
-            uint256 totalWeiAmount, 
+            uint256 totalWeiAmount,
             uint256 tokensBonus
         )
     {
@@ -473,7 +473,7 @@ contract PricingStrategyImpl is PricingStrategy, ExchangeContract {
                 tiers[i].endTime > block.timestamp
             ) {
                 if (
-                    newTokensSold.add(remainingTokens) > 
+                    newTokensSold.add(remainingTokens) >
                     tiers[i].maxTokensCollected
                 ) {
                     diff = tiers[i].maxTokensCollected.sub(newTokensSold);
@@ -510,4 +510,5 @@ contract PricingStrategyImpl is PricingStrategy, ExchangeContract {
             return (0, 0);
         }
     }
+
 }

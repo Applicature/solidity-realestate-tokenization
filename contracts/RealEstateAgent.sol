@@ -2,14 +2,17 @@ pragma solidity ^0.4.24;
 
 import "./ico.contracts/agent/CrowdsaleAgent.sol";
 import "./RealEstateFT.sol";
-
+import "./ico.contracts/dividends/Dividends.sol";
+import "./ico.contracts/Management.sol";
 
 contract RealEstateAgent is CrowdsaleAgent {
 
     constructor(address _management)
         public
         CrowdsaleAgent(_management)
-    {}
+    {
+
+    }
 
     function onContribution(
         address,
@@ -54,7 +57,7 @@ contract RealEstateAgent is CrowdsaleAgent {
         if (_from != address(0)) {
             dividendsInstance.updateValueAtNow(
                 _from,
-                    tokenInstance.balanceOf(_from)
+                tokenInstance.balanceOf(_from)
             );
         }
         if (_to != address(0)) {

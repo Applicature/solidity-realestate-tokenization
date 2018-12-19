@@ -17,6 +17,7 @@ contract Constants {
     uint256 public constant EXTERNAL_CONTRIBUTORS = 11;
     uint256 public constant CAN_UPDATE_DIVIDENDS = 12;
     uint256 public constant CAN_CREATE_DIVIDENDS = 13;
+    uint256 public constant CAN_CONFIGURE_MANAGEMENT = 14;
 
 
     // Contract Registry keys

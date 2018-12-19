@@ -12,21 +12,21 @@ interface IERC1358FT {
      * may fail in case transferable amount exceeds sender balance or 'from' address
      * is invalid
      */
-    event Transfer(
-        address _from,
-        address _to,
-        uint256 indexed _tokenId
-    );
+//    event Transfer(
+//        address _from,
+//        address _to,
+//        uint256 indexed _tokenId
+//    );
 
     /**
      * @dev This emits when Fungible Token is being transfered from specified address
      * by a owner of tokens or approved address for Fungible Token
      */
-    event Approval(
-        address indexed _owner,
-        address indexed _approved,
-        uint256 indexed _tokenId
-    );
+//    event Approval(
+//        address indexed _owner,
+//        address indexed _approved,
+//        uint256 indexed _tokenId
+//    );
 
 //    /**
 //     * @notice Returns value of specified address of Fungible Token

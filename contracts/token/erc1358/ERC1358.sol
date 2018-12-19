@@ -1,16 +1,17 @@
 pragma solidity ^0.4.24;
 
-import "openzeppelin-solidity/contracts/ownership/Ownable.sol"; 
+import "openzeppelin-solidity/contracts/ownership/Ownable.sol";
 import "./ERC1358NFTFull.sol";
 import "./ERC1358FTFull.sol";
-import "./IERC1358.sol";
+//import "./IERC1358.sol";
+import "../../ico.contracts/Management.sol";
 
 
-contract ERC1358 is IERC1358, ERC1358NFTFull, Ownable {
+contract ERC1358 is  ERC1358NFTFull, Ownable {
 
-    // Mapping from Non-Fungible token id to address of Fungible Token 
+    // Mapping from Non-Fungible token id to address of Fungible Token
     mapping (uint256 => address) public ftAddresses;
-
+    mapping (uint256 => address) public managementAddresses;
     // Mapping from Non-Fungible token id to its value in equivalent of Fungible tokens
     mapping (uint256 => uint256) public nftValues;
 
@@ -22,14 +23,14 @@ contract ERC1358 is IERC1358, ERC1358NFTFull, Ownable {
     constructor(
         string _name,
         string _symbol
-    ) 
+    )
         public
-        ERC1358NFTFull(_name, _symbol) 
+        ERC1358NFTFull(_name, _symbol)
     {
 
-    } 
+    }
 
-    /** 
+    /**
      * @dev Mint NFT token and create FT accordingly
      * @param _name - Name for FT
      * @param _symbol - Symbol for FT
@@ -37,25 +38,26 @@ contract ERC1358 is IERC1358, ERC1358NFTFull, Ownable {
      * @param _tokenOwner - Address of FT owner
      * @param _fungibleTokenSupply - Max token supply for FT
      */
-    function mint(
+    function mintNFT(
         string _name,
         string _symbol,
         uint256 _decimals,
         address _tokenOwner,
         uint256 _fungibleTokenSupply
-    ) 
+    )
         public
         returns (uint256)
     {
         uint256 tokenId = _allTokens.length;
 
         address fungibleToken = _createFT(
-            _name, 
+            _name,
             _symbol,
             _decimals,
             _tokenOwner,
             _fungibleTokenSupply,
-            tokenId
+            tokenId,
+            address(0)
         );
 
         require(super._mint(_tokenOwner, tokenId) == true);
@@ -66,7 +68,7 @@ contract ERC1358 is IERC1358, ERC1358NFTFull, Ownable {
         return tokenId;
     }
 
-    /** 
+    /**
      * @dev Burn NFT and delete FT data
      * @param _owner - owner address of NFT to burn
      * @param _tokenId - Unique identifier of NFT
@@ -74,7 +76,7 @@ contract ERC1358 is IERC1358, ERC1358NFTFull, Ownable {
     function burn(
         address _owner,
         uint256 _tokenId
-    ) 
+    )
         public
         returns (bool)
     {
@@ -90,26 +92,26 @@ contract ERC1358 is IERC1358, ERC1358NFTFull, Ownable {
      */
     function nftValue(
         uint256 _tokenId
-    ) 
+    )
         public
-        view 
+        view
         returns (uint256)
     {
         return nftValues[_tokenId];
     }
 
-    /** 
+    /**
      * @dev Returns FT token balance of specified NFT
-     * @param _holder - Holder address 
+     * @param _holder - Holder address
      * @param _tokenId - Unique identifier of NFT
      */
     function ftHolderBalance(
         uint256 _tokenId,
         address _holder
-    ) 
-        public 
-        view 
-        returns (uint256) 
+    )
+        public
+        view
+        returns (uint256)
     {
         return ERC1358FTFull(ftAddresses[_tokenId]).balanceOf(_holder);
     }
@@ -124,10 +126,10 @@ contract ERC1358 is IERC1358, ERC1358NFTFull, Ownable {
         uint256 _tokenId,
         uint256 _indexFrom,
         uint256 _indexTo
-    ) 
+    )
         public
         view
-        returns (address[], uint256[]) 
+        returns (address[], uint256[])
     {
         return ERC1358FTFull(ftAddresses[_tokenId])
             .holders(_indexFrom, _indexTo);
@@ -152,10 +154,10 @@ contract ERC1358 is IERC1358, ERC1358NFTFull, Ownable {
     function ftAddress(uint256 _tokenId)
         public
         view
-        returns (address _ftAddress) 
+        returns (address _ftAddress)
     {
         return ftAddresses[_tokenId];
-    } 
+    }
 
     /**
      * @dev Creates FT with specified parameters
@@ -172,15 +174,22 @@ contract ERC1358 is IERC1358, ERC1358NFTFull, Ownable {
         uint256 _decimals,
         address _tokenOwner,
         uint256 _fungibleTokenSupply,
-        uint256 _tokenId
-    ) 
-        internal 
+        uint256 _tokenId,
+        address
+    )
+        internal
         returns (address)
     {
         require (_decimals > 0);
         require (_tokenOwner != address(0));
         require (_fungibleTokenSupply > 0);
-
+        Management managementAddress = new Management();
+        managementAddresses[_tokenId] = managementAddress;
+        managementAddress.setPermission(
+            _tokenOwner,
+            managementAddress.CAN_CONFIGURE_MANAGEMENT(),
+            true
+        );
         ERC1358FTFull fungibleToken = new ERC1358FTFull(
             _name,
             _symbol,
@@ -188,7 +197,8 @@ contract ERC1358 is IERC1358, ERC1358NFTFull, Ownable {
             _fungibleTokenSupply,
             address(this),
             _tokenId,
-            _tokenOwner
+            _tokenOwner,
+            managementAddress
         );
 
         return address(fungibleToken);

@@ -17,7 +17,7 @@ contract MintableToken is BasicToken, Claimable, Managed {
     bool public allowedMinting;
 
     event Mint(
-        address indexed holder, 
+        address indexed holder,
         uint256 tokens
     );
 
@@ -57,18 +57,18 @@ contract MintableToken is BasicToken, Claimable, Managed {
     }
 
     /// @notice update allowedMinting flat
-    function disableMinting() 
-        public 
-        requirePermission(CAN_UPDATE_STATE) 
+    function disableMinting()
+        public
+        requirePermission(CAN_UPDATE_STATE)
     {
         allowedMinting = false;
     }
 
     /// @return available tokens
-    function availableTokens() 
-        public 
-        view 
-        returns (uint256 tokens) 
+    function availableTokens()
+        public
+        view
+        returns (uint256 tokens)
     {
         return maxSupply.sub(totalSupply_);
     }

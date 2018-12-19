@@ -1,20 +1,15 @@
 pragma solidity ^0.4.24;
 
-import "./token/erc1358/ERC1358FTFull.sol";
-import "./RealEstateFabric.sol";
-import "./ico.contracts/token/erc20/MintableToken.sol";
+//import "./token/erc1358/ERC1358FTFull.sol";
 import "./RealEstateAgent.sol";
 import "./GeneralConstants.sol";
+import "./token/erc1358/ERC1358FTFull.sol";
 
 
-contract RealEstateFT is
-    ERC1358FTFull,
-    MintableToken,
-    GeneralConstants
-{
+contract RealEstateFT is ERC1358FTFull, GeneralConstants {
 
     /**
-     * @dev Constructor of RealEstateFT smart contract for Tallyx system
+     * @dev Constructor of RealEstateFT smart contract
      * @param _name - Name for FT
      * @param _symbol - Symbol for FT
      * @param _decimals - Precision amount for FT
@@ -38,57 +33,59 @@ contract RealEstateFT is
             _name,
             _symbol,
             _decimals,
-            0,
+            _maxSupply,
             _nftAddress,
             _tokenId,
-            _owner
-        )
-        MintableToken(
-            _maxSupply,
-            0,
-            false,
+            _owner,
             _management
         )
     {
 
     }
 
-    function transfer(
-        address _to,
-        uint256 _value
-    )
-        public
-        returns (bool)
-    {
-        if (true == super.transfer(_to, _value)) {
-            RealEstateAgent(
-                management.contractRegistry(CONTRACT_AGENT)
-            ).onTransfer(msg.sender, _to);
-            return true;
-        }
-    }
-
-    function transferFrom(
-        address _from,
-        address _to,
-        uint256 _amount
-    )
-        public
-        returns (bool)
-    {
-        if (true == super.transferFrom(_from, _to, _amount)) {
-            RealEstateAgent(
-                management.contractRegistry(CONTRACT_AGENT)
-            ).onTransfer(_from, _to);
-            return true;
-        }
-    }
-
-    function mint(address _holder, uint256 _tokens) public {
-        super.mint(_holder, _tokens);
-        RealEstateAgent(
-            management.contractRegistry(CONTRACT_AGENT)
-        ).onMinting(_holder);
-    }
+    //    function transfer(
+    //        address _to,
+    //        uint256 _value
+    //    )
+    //        public
+    //        returns (bool)
+    //    {
+    //        if (true == super.transfer(_to, _value)) {
+    //            logTransfer(msg.sender, _to);
+    //            return true;
+    //        }
+    //    }
+    //
+    //    function transferFrom(
+    //        address _from,
+    //        address _to,
+    //        uint256 _amount
+    //    )
+    //        public
+    //        returns (bool)
+    //    {
+    //        if (true == super.transferFrom(_from, _to, _amount)) {
+    //            logTransfer(_from, _to);
+    //            return true;
+    //        }
+    //    }
+    //
+    //    function mint(address _holder, uint256 _tokens) public {
+    //        super.mint(_holder, _tokens);
+    //        RealEstateAgent(
+    //            management.contractRegistry(CONTRACT_AGENT)
+    //        ).onMinting(_holder);
+    //    }
+    //
+    //    function logTransfer(
+    //        address _from,
+    //        address _to
+    //    )
+    //        internal
+    //    {
+    //        RealEstateAgent(
+    //            management.contractRegistry(CONTRACT_AGENT)
+    //        ).onTransfer(_from, _to);
+    //    }
 
 }

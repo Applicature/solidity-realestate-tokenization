@@ -30,6 +30,15 @@ contract Management is Claimable, Constants {
         address target
     );
 
+    modifier permittedToConfigure() {
+        require(
+            msg.sender == owner ||
+            permissions[msg.sender][CAN_CONFIGURE_MANAGEMENT] == true,
+            ERROR_ACCESS_DENIED
+        );
+        _;
+    }
+
     function contractRegistry(
         address _source,
         uint256 _key
@@ -51,7 +60,7 @@ contract Management is Claimable, Constants {
         bool _value
     )
         public
-        onlyOwner
+        permittedToConfigure
     {
         permissions[_address][_permission] = _value;
         emit PermissionsSet(_address, _permission, _value);
@@ -62,7 +71,7 @@ contract Management is Claimable, Constants {
         address _target
     )
         public
-        onlyOwner
+        permittedToConfigure
     {
         contractRegistry[_key] = _target;
         emit ContractRegistered(_key, 0x0, _target);
@@ -74,7 +83,7 @@ contract Management is Claimable, Constants {
         address _target
     )
         public
-        onlyOwner
+        permittedToConfigure
     {
         sourceContractRegistry[_source][_key] = _target;
         emit ContractRegistered(_key, _source, _target);

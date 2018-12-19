@@ -1,14 +1,13 @@
 pragma solidity ^0.4.24;
 
-import "./IERC1358FTEnumerable.sol";
-import "./ERC1358FT.sol";
+//import "./IERC1358FTEnumerable.sol";
 import "openzeppelin-solidity/contracts/token/ERC20/StandardToken.sol";
 
 
-contract ERC1358FTEnumerable is ERC1358FT, StandardToken {
+contract ERC1358FTEnumerable is StandardToken {
 
-    // Total tokens supply
-    uint256 internal totalSupply_;
+//     Total tokens supply
+//    uint256 internal totalSupply_;
 
     // Address of main NFT
     address internal nftAddress_;
@@ -35,7 +34,6 @@ contract ERC1358FTEnumerable is ERC1358FT, StandardToken {
         uint256 _initialTokenId,
         address _owner
     ) public {
-        require(_totalSupply > 0);
         require(_nftAddress != address(0));
         require(_initialTokenId >= 0);
         require(_owner != address(0));
@@ -62,13 +60,6 @@ contract ERC1358FTEnumerable is ERC1358FT, StandardToken {
      */
     function holderByIndex(uint256 _index) public view returns (address) {
         return tokenHoldersRegistry[_index];
-    }
-
-    /**
-    * @dev Returns total supply of Fungible Token
-    */
-    function totalSupply() public view returns (uint256) {
-        return totalSupply_;
     }
 
     /**
