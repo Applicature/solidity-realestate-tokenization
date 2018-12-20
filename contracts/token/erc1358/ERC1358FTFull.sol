@@ -1,11 +1,10 @@
 pragma solidity ^0.4.24;
 
-//import "./ERC1358.sol";
-import "./ERC1358FTMetadata.sol";
+import {Metadata} from "./ERC1358FTMetadata.sol";
 import "./ERC1358FTEnumerable.sol";
 import "../../ico.contracts/token/erc20/MintableToken.sol";
 
-contract ERC1358FTFull is MintableToken, ERC1358FTMetadata, ERC1358FTEnumerable {
+contract ERC1358FTFull is MintableToken, Metadata, ERC1358FTEnumerable {
     /**
      * @dev Constructor for ERC1358FT full implementation contract
      * @param _name - Name for FT
@@ -104,8 +103,8 @@ contract ERC1358FTFull is MintableToken, ERC1358FTMetadata, ERC1358FTEnumerable 
         address _operator,
         uint256 _amount
     )
-    public
-    returns (bool)
+        public
+        returns (bool)
     {
         require(_operator != address(0));
         return super.approve(_operator, _amount);
@@ -122,8 +121,8 @@ contract ERC1358FTFull is MintableToken, ERC1358FTMetadata, ERC1358FTEnumerable 
         address _operator,
         uint256 _addedAmount
     )
-    public
-    returns (bool)
+        public
+        returns (bool)
     {
         require(_operator != address(0));
         return super.increaseApproval(_operator, _addedAmount);
@@ -140,8 +139,8 @@ contract ERC1358FTFull is MintableToken, ERC1358FTMetadata, ERC1358FTEnumerable 
         address _operator,
         uint256 _substractedAmount
     )
-    public
-    returns (bool)
+        public
+        returns (bool)
     {
         require(_operator != address(0));
         return super.decreaseApproval(_operator, _substractedAmount);

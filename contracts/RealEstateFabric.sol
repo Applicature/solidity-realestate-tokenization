@@ -10,7 +10,8 @@ import "./ico.contracts/Management.sol";
 import "./ico.contracts/Constants.sol";
 
 
-contract RealEstateFabric is ERC1358, Strings, GeneralConstants, Constants, Permissions {
+contract RealEstateFabric is ERC1358, GeneralConstants, Constants, Permissions {
+    using Strings for *;
 
     /**
      * Constructor of RealEstateFabric smart contract for Tallyx system
@@ -50,7 +51,7 @@ contract RealEstateFabric is ERC1358, Strings, GeneralConstants, Constants, Perm
         address fungibleToken;
 
         fungibleToken = _createFT(
-            concat("REAL_ESTATE", toString(tokenId)),
+            "REAL_ESTATE".toSlice().concat(tokenId.uint2str().toSlice()),
             "REAL_ESTATE",
             18,
             _owner,

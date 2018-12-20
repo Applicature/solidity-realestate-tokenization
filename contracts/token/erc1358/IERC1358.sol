@@ -21,6 +21,7 @@ contract IERC1358 is IERC1358NFTFull {
      * @param _tokenOwner - Address of FT owner
      * @param _fungibleTokenSupply - Max token supply for FT
      * @param _tokenId - Unique identifier of NFT related to this FT
+     * @param _management - management contract address
      */
     function _createFT(
         string _name,
@@ -28,7 +29,8 @@ contract IERC1358 is IERC1358NFTFull {
         uint256 _decimals,
         address _tokenOwner,
         uint256 _fungibleTokenSupply,
-        uint256 _tokenId
+        uint256 _tokenId,
+        address _management
     )
         internal
         returns (address);

@@ -4,7 +4,10 @@ import "./RealEstateFabric.sol";
 import "./GeneralConstants.sol";
 import "./ico.contracts/crowdsale/CrowdsaleImpl.sol";
 
+
 contract RealEstateCrowdsale is GeneralConstants {
+
+    address public crowdsaleAddress;
 
     constructor (
         uint256 _realEstateId,
@@ -14,23 +17,23 @@ contract RealEstateCrowdsale is GeneralConstants {
         public
     {
 
-        address managementContract = RealEstateFabric(_realEstateFabric).managementAddresses(_realEstateId);
+        address managementContract = RealEstateFabric(
+            _realEstateFabric
+        ).managementAddresses(_realEstateId);
 
         deployCrowdsale(
-            _realEstateId,
             _investmentPeriod,
             managementContract
         );
     }
 
     function deployCrowdsale(
-        uint256 _realEstateId,
         uint256[2] _investmentPeriod,
         address _managementContract
     )
         public
     {
-        new CrowdsaleImpl(
+        crowdsaleAddress = new CrowdsaleImpl(
             _investmentPeriod[0],
             _investmentPeriod[1],
             true,

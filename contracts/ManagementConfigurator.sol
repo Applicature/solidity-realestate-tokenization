@@ -16,13 +16,13 @@ contract ManagementConfigurator is Constants, GeneralConstants {
     )
         public
     {
-        RealEstateFabric realEstateFabric = RealEstateFabric(_realEstateFabric);
-        address managementContractAddress = realEstateFabric.managementAddresses(_realEstateId);
+        address managementAddress = RealEstateFabric(_realEstateFabric)
+            .managementAddresses(_realEstateId);
         require(
-            managementContractAddress != address(0),
+            managementAddress != address(0),
             ERROR_VALUE_EQUALS_ZERO
         );
-        Management managementInstance = Management(managementContractAddress);
+        Management managementInstance = Management(managementAddress);
         managementInstance.registerContract(
             CONTRACT_CROWDSALE,
             _icoContracts[0]
@@ -58,9 +58,7 @@ contract ManagementConfigurator is Constants, GeneralConstants {
             true
         );
         managementInstance.setPermission(
-            _icoContracts[3],
-            CAN_MINT_TOKENS,
-            true
+            _icoContracts[3], CAN_MINT_TOKENS, true
         );
         managementInstance.setPermission(
             _signerAddress,

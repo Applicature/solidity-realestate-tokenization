@@ -5,6 +5,7 @@ import "./RealEstateFT.sol";
 import "./ico.contracts/dividends/Dividends.sol";
 import "./ico.contracts/Management.sol";
 
+
 contract RealEstateAgent is CrowdsaleAgent {
 
     constructor(address _management)

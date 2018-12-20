@@ -1,7 +1,5 @@
 pragma solidity ^0.4.24;
 
-//import "./ERC1358FT.sol";
-
 
 contract ERC1358FTMetadata {
     // Name for FT (notice: Name is not unique)
@@ -27,25 +25,4 @@ contract ERC1358FTMetadata {
         symbol = _symbol;
         decimals = _decimals;
     }
-
-//    /**
-//     * @dev Return name of FT
-//     */
-//    function name() public view returns (string) {
-//        return name_;
-//    }
-//
-//    /**
-//     * @dev Return symbol of FT
-//     */
-//    function symbol() public view returns (string) {
-//        return symbol_;
-//    }
-//
-//    /**
-//     * @dev Return decimals precision of FT
-//     */
-//    function decimals() public view returns (uint256) {
-//        return decimals_;
-//    }
 }

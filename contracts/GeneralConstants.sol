@@ -2,18 +2,17 @@ pragma solidity ^0.4.24;
 
 
 contract GeneralConstants {
-    uint256 public PERMISSION_SET_PERMISSION = 1;
-    uint256 public PERMISSION_TO_CREATE = 2;
-    uint256 public PERMISSION_TO_MODIFY = 4;
-    uint256 public PERMISSION_TO_MODIFY_STATUS = 8;
-    uint256 public PERMISSION_TO_MODIFY_VERIFIER = 16;
-    uint256 public PERMISSION_TO_MODIFY_PAY_STATUS = 32;
-    uint256 public PERMISSION_TO_DEACTIVATE = 64;
+    uint256 public constant PERMISSION_SET_PERMISSION = 1;
+    uint256 public constant PERMISSION_TO_CREATE = 2;
+    uint256 public constant PERMISSION_TO_MODIFY = 4;
+    uint256 public constant PERMISSION_TO_MODIFY_STATUS = 8;
+    uint256 public constant PERMISSION_TO_MODIFY_VERIFIER = 16;
+    uint256 public constant PERMISSION_TO_MODIFY_PAY_STATUS = 32;
+    uint256 public constant PERMISSION_TO_DEACTIVATE = 64;
 
-    string public ERROR_VALUE_EQUALS_ZERO = "ZERO VALUE";
-    string public ERROR_DISALLOWED = "THIS FUNCTION IS DISALLOWED";
-    string public ERROR_ACCESS_RESTRICTED = "REQUIRE ADDITIONAL PERMISSION";
-    string public ERROR_MINTING_NFT = "MINT FUNCTION FAILED";
-    string public ERROR_ZERO_ADDRESS = "ZERO ADDRESS";
-    string public ERROR_TOKI_NOT_LOCKED = "TOKI NOT LOCKED TO MARKLETPLACE";
+    string public constant ERROR_VALUE_EQUALS_ZERO = "ZERO VALUE";
+    string public constant ERROR_DISALLOWED = "THIS FUNCTION IS DISALLOWED";
+    string public constant ERROR_ACCESS_RESTRICTED = "ACCESS RESTRICTED";
+    string public constant ERROR_MINTING_NFT = "MINT FUNCTION FAILED";
+    string public constant ERROR_ZERO_ADDRESS = "ZERO ADDRESS";
 }

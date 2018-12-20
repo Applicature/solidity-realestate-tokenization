@@ -1,0 +1,22 @@
+{
+  "extends": "default",
+  "rules": {
+    "avoid-throw": false,
+    "avoid-suicide": "error",
+    "avoid-sha3": "warn",
+    "indent": ["warn", 4],
+    "compiler-fixed": false,
+    "not-rely-on-time": false,
+    "quotes": ["error", "double"],
+    "no-empty-blocks": false,
+    "no-complex-fallback": false,
+    "two-lines-top-level-separator": false,
+    "code-complexity": 8,
+    "avoid-call-value": false,
+    "no-simple-event-func-name": false,
+    "avoid-low-level-calls": false,
+    "no-inline-assembly": false,
+    "max-line-length": 170,
+    "bracket-align": false
+  }
+}

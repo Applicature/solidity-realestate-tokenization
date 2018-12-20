@@ -16,8 +16,8 @@ contract RealEstateCrowdsaleDependecies is GeneralConstants {
     DependenciesDeployed public dependecies;
 
     struct DependenciesDeployed {
-        address realEstateAgent;
-        address mintableTokenAllocator;
+        address agent;
+        address allocator;
         address directContributionForwarder;
         address dividends;
     }
@@ -31,33 +31,35 @@ contract RealEstateCrowdsaleDependecies is GeneralConstants {
     {
 
         RealEstateFabric realEstateFabric = RealEstateFabric(_realEstateFabric);
-        address managementContract = realEstateFabric.managementAddresses(_realEstateId);
+        address managementContract = realEstateFabric
+            .managementAddresses(_realEstateId);
+
         RealEstateFT fungibleTokenInstance = RealEstateFT(
             realEstateFabric.ftAddresses(_realEstateId)
         );
-        MintableTokenAllocator mintableTokenAllocator = new MintableTokenAllocator(
+        MintableTokenAllocator allocator = new MintableTokenAllocator(
             fungibleTokenInstance.maxSupply(),
             managementContract
         );
-        DirectContributionForwarder directContributionForwarder = new DirectContributionForwarder(
-               _etherHolder,
-                managementContract
-            );
+        DirectContributionForwarder forwarder = new DirectContributionForwarder(
+            _etherHolder,
+            managementContract
+        );
         Dividends dividends = new Dividends(managementContract);
-        RealEstateAgent realEstateAgent = new RealEstateAgent(managementContract);
+        RealEstateAgent agent = new RealEstateAgent(managementContract);
 
-        dependecies =  DependenciesDeployed(
-            address(realEstateAgent),
-            address(mintableTokenAllocator),
-            address(directContributionForwarder),
+        dependecies = DependenciesDeployed(
+            address(agent),
+            address(allocator),
+            address(forwarder),
             address(dividends)
         );
     }
 
     function getDependecies() public view returns(address[4] dependenciesList){
-        dependenciesList[0] = dependecies.realEstateAgent;
-        dependenciesList[1] = dependecies.mintableTokenAllocator;
-        dependenciesList[2] = dependecies.directContributionForwarder;
+        dependenciesList[0] = dependecies.agent;
+        dependenciesList[1] = dependecies.allocator;
+        dependenciesList[2] = dependecies.forwarder;
         dependenciesList[3] = dependecies.dividends;
     }
 }

@@ -8,6 +8,8 @@ import "./ico.contracts/pricing/PricingStrategyImpl.sol";
 
 contract RealEstateStrategy is Constants {
 
+    PricingStrategyImpl public strategy;
+
     constructor (
         uint256 _realEstateId,
         address _realEstateFabric,
@@ -21,12 +23,13 @@ contract RealEstateStrategy is Constants {
         public
     {
         RealEstateFabric realEstateFabric = RealEstateFabric(_realEstateFabric);
-        address managementContract = realEstateFabric.managementAddresses(_realEstateId);
+        address managementContract = realEstateFabric
+            .managementAddresses(_realEstateId);
 
         RealEstateFT fungibleTokenInstance = RealEstateFT(
             realEstateFabric.ftAddresses(_realEstateId)
         );
-        new PricingStrategyImpl(
+        strategy = new PricingStrategyImpl(
             managementContract,
             _tiersChangingAllowed,
             _updateChangeRateAllowed,

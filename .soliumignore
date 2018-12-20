@@ -7,3 +7,4 @@ zeppelin-solidity/
 coverageEnv/
 contracts/Migrations.sol
 contracts/tests
+contracts/ico.contracts/tests

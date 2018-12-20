@@ -3,7 +3,7 @@ pragma solidity ^0.4.24;
 import "openzeppelin-solidity/contracts/ownership/Ownable.sol";
 import "./ERC1358NFTFull.sol";
 import "./ERC1358FTFull.sol";
-//import "./IERC1358.sol";
+import "./IERC1358.sol";
 import "../../ico.contracts/Management.sol";
 
 

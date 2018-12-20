@@ -1,13 +1,10 @@
 pragma solidity ^0.4.24;
 
-//import "./IERC1358FTEnumerable.sol";
+import "./IERC1358FTEnumerable.sol";
 import "openzeppelin-solidity/contracts/token/ERC20/StandardToken.sol";
 
 
-contract ERC1358FTEnumerable is StandardToken {
-
-//     Total tokens supply
-//    uint256 internal totalSupply_;
+contract ERC1358FTEnumerable is IERC1358FTEnumerable, StandardToken {
 
     // Address of main NFT
     address internal nftAddress_;
