@@ -59,7 +59,7 @@ contract RealEstateCrowdsaleDependecies is GeneralConstants {
     function getDependecies() public view returns(address[4] dependenciesList){
         dependenciesList[0] = dependecies.agent;
         dependenciesList[1] = dependecies.allocator;
-        dependenciesList[2] = dependecies.forwarder;
+        dependenciesList[2] = dependecies.directContributionForwarder;
         dependenciesList[3] = dependecies.dividends;
     }
 }
