@@ -2,8 +2,8 @@ pragma solidity ^0.4.24;
 
 import "./RealEstateFabric.sol";
 import "./GeneralConstants.sol";
-import "./ico.contracts/Management.sol";
-import "./ico.contracts/Constants.sol";
+import "./crowdsale/Management.sol";
+import "./crowdsale/Constants.sol";
 
 
 contract ManagementConfigurator is Constants, GeneralConstants {

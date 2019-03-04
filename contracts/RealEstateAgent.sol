@@ -1,9 +1,9 @@
 pragma solidity ^0.4.24;
 
-import "./ico.contracts/agent/CrowdsaleAgent.sol";
+import "./crowdsale/agent/CrowdsaleAgent.sol";
 import "./RealEstateFT.sol";
-import "./ico.contracts/dividends/Dividends.sol";
-import "./ico.contracts/Management.sol";
+import "./crowdsale/dividends/Dividends.sol";
+import "./crowdsale/Management.sol";
 
 
 contract RealEstateAgent is CrowdsaleAgent {

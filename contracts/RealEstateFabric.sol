@@ -6,8 +6,8 @@ import "./Strings.sol";
 import "./GeneralConstants.sol";
 import "./Permissions.sol";
 import "./RealEstateCrowdsale.sol";
-import "./ico.contracts/Management.sol";
-import "./ico.contracts/Constants.sol";
+import "./crowdsale/Management.sol";
+import "./crowdsale/Constants.sol";
 
 
 contract RealEstateFabric is ERC1358, GeneralConstants, Constants, Permissions {

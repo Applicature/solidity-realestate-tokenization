@@ -4,11 +4,9 @@ import "./RealEstateFabric.sol";
 import "./RealEstateFT.sol";
 import "./GeneralConstants.sol";
 import "./RealEstateAgent.sol";
-import "./ico.contracts/allocator/MintableTokenAllocator.sol";
-import "./ico.contracts/contribution/DirectContributionForwarder.sol";
-import "./ico.contracts/dividends/Dividends.sol";
-
-
+import "./crowdsale/allocator/MintableTokenAllocator.sol";
+import "./crowdsale/contribution/DirectContributionForwarder.sol";
+import "./crowdsale/dividends/Dividends.sol";
 
 
 contract RealEstateCrowdsaleDependecies is GeneralConstants {

@@ -2,7 +2,7 @@ pragma solidity ^0.4.24;
 
 import "./RealEstateFabric.sol";
 import "./GeneralConstants.sol";
-import "./ico.contracts/crowdsale/CrowdsaleImpl.sol";
+import "./crowdsale/crowdsale/CrowdsaleImpl.sol";
 
 
 contract RealEstateCrowdsale is GeneralConstants {

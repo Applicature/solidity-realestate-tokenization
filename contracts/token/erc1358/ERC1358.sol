@@ -4,7 +4,7 @@ import "openzeppelin-solidity/contracts/ownership/Ownable.sol";
 import "./ERC1358NFTFull.sol";
 import "./ERC1358FTFull.sol";
 import "./IERC1358.sol";
-import "../../ico.contracts/Management.sol";
+import "../../crowdsale/Management.sol";
 
 
 contract ERC1358 is  ERC1358NFTFull, Ownable {

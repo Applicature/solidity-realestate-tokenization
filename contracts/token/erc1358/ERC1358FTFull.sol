@@ -2,7 +2,7 @@ pragma solidity ^0.4.24;
 
 import {ERC1358FTMetadata as Metadata} from "./ERC1358FTMetadata.sol";
 import "./ERC1358FTEnumerable.sol";
-import "../../ico.contracts/token/erc20/MintableToken.sol";
+import "../../crowdsale/token/erc20/MintableToken.sol";
 
 
 contract ERC1358FTFull is MintableToken, Metadata, ERC1358FTEnumerable {

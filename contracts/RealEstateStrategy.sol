@@ -3,7 +3,7 @@ pragma solidity ^0.4.24;
 import "./RealEstateFabric.sol";
 import "./RealEstateFT.sol";
 import "./GeneralConstants.sol";
-import "./ico.contracts/pricing/PricingStrategyImpl.sol";
+import "./crowdsale/pricing/PricingStrategyImpl.sol";
 
 
 contract RealEstateStrategy is Constants {
