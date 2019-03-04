@@ -1,9 +1,9 @@
 {
-  "name": "topp-protocol-contracts",
+  "name": "solidity-realestate-tokenization",
   "version": "1.0.0",
-  "description": "Smart Contract templates",
-  "homepage": "https://bitbucket.org/applicature/topp.protocol.contract/#readme",
-  "license": "UNLICENSED",
+  "description": "This boilerplate smart contract template introduces the core ideas and implementations for real estate tokenization",
+  "homepage": "https://github.com/Applicature/solidity-realestate-tokenization#readme",
+  "license": "Apache-2.0",
   "keywords": [
     "solidity",
     "ethereum",
@@ -12,7 +12,7 @@
   ],
   "repository": {
     "type": "git",
-    "url": "git+https://bitbucket.org/applicature/topp.protocol.contract.git"
+    "url": "git+https://github.com/Applicature/solidity-realestate-tokenization.git"
   },
   "author": "Andrew Zubko <andrew@applicature.com>",
   "engines": {
